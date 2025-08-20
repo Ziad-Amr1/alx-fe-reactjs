@@ -1,21 +1,78 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useRecipeStore from './recipeStore';
+import SearchBar from './SearchBar';
+import RecipeFilters from './RecipeFilters';
 
 const RecipeList = () => {
-  const recipes = useRecipeStore((state) => state.recipes);
+  const filteredRecipes = useRecipeStore(state => state.filteredRecipes);
+  const searchTerm = useRecipeStore(state => state.searchTerm);
+  const selectedCategory = useRecipeStore(state => state.selectedCategory);
+  const selectedDifficulty = useRecipeStore(state => state.selectedDifficulty);
+  const maxCookingTime = useRecipeStore(state => state.maxCookingTime);
+
+  // Check if any filters are active
+  const isFiltered = searchTerm !== '' || 
+                    selectedCategory !== 'all' || 
+                    selectedDifficulty !== 'all' || 
+                    maxCookingTime !== 0;
 
   return (
     <div className="recipe-list">
-      <h2>Shared Recipes ({recipes.length})</h2>
+      <div className="search-filters-container">
+        <SearchBar />
+        <RecipeFilters />
+      </div>
       
-      {recipes.length === 0 ? (
-        <p className="no-recipes">No recipes yet. Be the first to share one!</p>
+      <div className="results-header">
+        <h2>
+          {isFiltered ? 'Filtered Recipes' : 'All Recipes'} 
+          <span className="results-count"> ({filteredRecipes.length})</span>
+        </h2>
+        
+        {isFiltered && (
+          <div className="active-filters">
+            {searchTerm && (
+              <span className="active-filter">
+                Search: "{searchTerm}"
+              </span>
+            )}
+            {selectedCategory !== 'all' && (
+              <span className="active-filter">
+                Category: {selectedCategory}
+              </span>
+            )}
+            {selectedDifficulty !== 'all' && (
+              <span className="active-filter">
+                Difficulty: {selectedDifficulty}
+              </span>
+            )}
+            {maxCookingTime !== 0 && (
+              <span className="active-filter">
+                Max Time: {maxCookingTime}min
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+      
+      {filteredRecipes.length === 0 ? (
+        <div className="no-results">
+          <h3>No recipes found</h3>
+          <p>Try adjusting your search or filters to find what you're looking for.</p>
+        </div>
       ) : (
         <div className="recipes-container">
-          {recipes.map((recipe) => (
+          {filteredRecipes.map((recipe) => (
             <div key={recipe.id} className="recipe-card">
               <Link to={`/recipe/${recipe.id}`} className="recipe-link">
+                <div className="recipe-badges">
+                  <span className="category-badge">{recipe.category}</span>
+                  <span className={`difficulty-badge ${recipe.difficulty}`}>
+                    {recipe.difficulty}
+                  </span>
+                </div>
+                
                 <h3>{recipe.title}</h3>
                 <p className="recipe-description">{recipe.description}</p>
                 

@@ -1,4 +1,3 @@
-// src/components/RecipeDetails.jsx
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import useRecipeStore from './recipeStore';
@@ -28,7 +27,15 @@ const RecipeDetails = () => {
       <Link to="/" className="back-link">← Back to Recipes</Link>
       
       <div className="recipe-header">
-        <h1>{recipe.title}</h1>
+        <div>
+          <div className="recipe-badges">
+            <span className="category-badge">{recipe.category}</span>
+            <span className={`difficulty-badge ${recipe.difficulty}`}>
+              {recipe.difficulty}
+            </span>
+          </div>
+          <h1>{recipe.title}</h1>
+        </div>
         <div className="recipe-actions">
           <EditRecipeForm recipe={recipe} />
           <DeleteRecipeButton recipeId={recipe.id} />
