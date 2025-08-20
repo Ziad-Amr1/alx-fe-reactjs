@@ -448,6 +448,230 @@
   gap: 15px;
 }
 
+/* User Profile Styles */
+.user-profile {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.user-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.user-btn {
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.user-btn:hover {
+  background-color: #45a049;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout-btn {
+  padding: 5px 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+/* Favorites and Recommendations Styles */
+.favorites-list, .recommendations-list {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.favorites-list h2, .recommendations-list h2 {
+  margin-top: 0;
+  color: #333;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.recommendations-subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+.login-prompt, .no-favorites, .no-recommendations {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+}
+
+.favorites-container, .recommendations-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.favorite-card, .recommendation-card {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.favorite-card:hover, .recommendation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-card h3, .recommendation-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.favorite-card .recipe-description, .recommendation-card .recipe-description {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.favorite-card .recipe-details, .recommendation-card .recipe-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.recommendation-card .recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.recommendation-card .tag {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+}
+
+/* Favorite Button Styles */
+.favorite-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s;
+  padding: 5px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.favorite-btn.active {
+  color: #e91e63;
+}
+
+.favorite-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.favorite-btn.large {
+  position: static;
+  padding: 10px 15px;
+  width: auto;
+  height: auto;
+  border: 1px solid #e91e63;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.favorite-btn.large.active {
+  background-color: #e91e63;
+  color: white;
+}
+
+/* Recipe Tags in Details */
+.recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.recipe-tags .tag {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .user-buttons {
+    flex-direction: column;
+  }
+  
+  .user-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .favorites-container, .recommendations-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .recipe-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .favorite-btn.large {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .recipe-content {

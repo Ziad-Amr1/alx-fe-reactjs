@@ -9,6 +9,9 @@ const RecipeDetails = () => {
   const recipeId = parseInt(id);
   const recipes = useRecipeStore(state => state.recipes);
   const recipe = recipes.find(recipe => recipe.id === recipeId);
+  const favorites = useRecipeStore(state => state.favorites);
+  const toggleFavorite = useRecipeStore(state => state.toggleFavorite);
+  const currentUser = useRecipeStore(state => state.currentUser);
 
   if (!recipe) {
     return (
@@ -37,6 +40,14 @@ const RecipeDetails = () => {
           <h1>{recipe.title}</h1>
         </div>
         <div className="recipe-actions">
+          <button 
+            onClick={() => toggleFavorite(recipe.id)}
+            className={`favorite-btn large ${favorites.includes(recipe.id) ? 'active' : ''}`}
+            disabled={!currentUser}
+            title={!currentUser ? "Please log in to add favorites" : ""}
+          >
+            {favorites.includes(recipe.id) ? '♥ Added to Favorites' : '♡ Add to Favorites'}
+          </button>
           <EditRecipeForm recipe={recipe} />
           <DeleteRecipeButton recipeId={recipe.id} />
         </div>
@@ -46,6 +57,11 @@ const RecipeDetails = () => {
       
       <div className="recipe-meta">
         <span className="cooking-time">⏱️ {recipe.cookingTime} minutes</span>
+        <div className="recipe-tags">
+          {recipe.tags.map(tag => (
+            <span key={tag} className="tag">{tag}</span>
+          ))}
+        </div>
       </div>
       
       <div className="recipe-content">
