@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import useRecipeStore from './recipeStore';
 
-const AddRecipeForm = () => {
-  const addRecipe = useRecipeStore((state) => state.addRecipe);
+const EditRecipeForm = ({ recipe, onClose }) => {
+  const updateRecipe = useRecipeStore(state => state.updateRecipe);
+  const [isEditing, setIsEditing] = useState(false);
   
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [ingredients, setIngredients] = useState('');
-  const [instructions, setInstructions] = useState('');
-  const [cookingTime, setCookingTime] = useState('');
-  const [showForm, setShowForm] = useState(false);
+  const [title, setTitle] = useState(recipe.title);
+  const [description, setDescription] = useState(recipe.description);
+  const [ingredients, setIngredients] = useState(recipe.ingredients.join(', '));
+  const [instructions, setInstructions] = useState(recipe.instructions);
+  const [cookingTime, setCookingTime] = useState(recipe.cookingTime);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     
     const ingredientsArray = ingredients.split(',').map(item => item.trim()).filter(item => item);
     
-    addRecipe({
+    updateRecipe(recipe.id, {
       title,
       description,
       ingredients: ingredientsArray,
@@ -24,33 +24,36 @@ const AddRecipeForm = () => {
       cookingTime: parseInt(cookingTime) || 0
     });
     
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setIngredients('');
-    setInstructions('');
-    setCookingTime('');
-    setShowForm(false);
+    setIsEditing(false);
+    if (onClose) onClose();
   };
 
+  const handleCancel = () => {
+    setIsEditing(false);
+    if (onClose) onClose();
+  };
+
+  if (!isEditing) {
+    return (
+      <button 
+        className="edit-btn"
+        onClick={() => setIsEditing(true)}
+      >
+        Edit Recipe
+      </button>
+    );
+  }
+
   return (
-    <div className="add-recipe-form">
-      {!showForm ? (
-        <button 
-          className="show-form-btn"
-          onClick={() => setShowForm(true)}
-        >
-          + Share Your Recipe
-        </button>
-      ) : (
+    <div className="edit-modal">
+      <div className="modal-content">
+        <h2>Edit Recipe</h2>
         <form onSubmit={handleSubmit} className="recipe-form">
-          <h2>Share a New Recipe</h2>
-          
           <div className="form-group">
-            <label htmlFor="title">Recipe Title</label>
+            <label htmlFor="edit-title">Recipe Title</label>
             <input
               type="text"
-              id="title"
+              id="edit-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g., Chocolate Chip Cookies"
@@ -59,9 +62,9 @@ const AddRecipeForm = () => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="edit-description">Description</label>
             <textarea
-              id="description"
+              id="edit-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe your recipe..."
@@ -71,9 +74,9 @@ const AddRecipeForm = () => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="ingredients">Ingredients (comma separated)</label>
+            <label htmlFor="edit-ingredients">Ingredients (comma separated)</label>
             <textarea
-              id="ingredients"
+              id="edit-ingredients"
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
               placeholder="flour, sugar, eggs, ..."
@@ -83,9 +86,9 @@ const AddRecipeForm = () => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="instructions">Instructions</label>
+            <label htmlFor="edit-instructions">Instructions</label>
             <textarea
-              id="instructions"
+              id="edit-instructions"
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
               placeholder="Step-by-step instructions..."
@@ -95,10 +98,10 @@ const AddRecipeForm = () => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="cookingTime">Cooking Time (minutes)</label>
+            <label htmlFor="edit-cookingTime">Cooking Time (minutes)</label>
             <input
               type="number"
-              id="cookingTime"
+              id="edit-cookingTime"
               value={cookingTime}
               onChange={(e) => setCookingTime(e.target.value)}
               placeholder="30"
@@ -109,20 +112,20 @@ const AddRecipeForm = () => {
           
           <div className="form-buttons">
             <button type="submit" className="submit-btn">
-              Share Recipe
+              Save Changes
             </button>
             <button 
               type="button" 
               className="cancel-btn"
-              onClick={() => setShowForm(false)}
+              onClick={handleCancel}
             >
               Cancel
             </button>
           </div>
         </form>
-      )}
+      </div>
     </div>
   );
 };
 
-export default AddRecipeForm;
+export default EditRecipeForm;

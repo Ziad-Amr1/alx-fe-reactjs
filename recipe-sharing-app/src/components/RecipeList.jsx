@@ -1,5 +1,6 @@
 import React from 'react';
-import useRecipeStore from '../store/recipeStore';
+import { Link } from 'react-router-dom';
+import useRecipeStore from './recipeStore';
 
 const RecipeList = () => {
   const recipes = useRecipeStore((state) => state.recipes);
@@ -14,26 +15,26 @@ const RecipeList = () => {
         <div className="recipes-container">
           {recipes.map((recipe) => (
             <div key={recipe.id} className="recipe-card">
-              <h3>{recipe.title}</h3>
-              <p className="recipe-description">{recipe.description}</p>
-              
-              <div className="recipe-details">
-                <span className="cooking-time">⏱️ {recipe.cookingTime} min</span>
+              <Link to={`/recipe/${recipe.id}`} className="recipe-link">
+                <h3>{recipe.title}</h3>
+                <p className="recipe-description">{recipe.description}</p>
                 
-                <div className="ingredients">
-                  <h4>Ingredients:</h4>
-                  <ul>
-                    {recipe.ingredients.map((ingredient, index) => (
-                      <li key={index}>{ingredient}</li>
-                    ))}
-                  </ul>
+                <div className="recipe-details">
+                  <span className="cooking-time">⏱️ {recipe.cookingTime} min</span>
+                  
+                  <div className="ingredients-preview">
+                    <h4>Ingredients:</h4>
+                    <ul>
+                      {recipe.ingredients.slice(0, 3).map((ingredient, index) => (
+                        <li key={index}>{ingredient}</li>
+                      ))}
+                      {recipe.ingredients.length > 3 && (
+                        <li>+{recipe.ingredients.length - 3} more</li>
+                      )}
+                    </ul>
+                  </div>
                 </div>
-                
-                <div className="instructions">
-                  <h4>Instructions:</h4>
-                  <p>{recipe.instructions}</p>
-                </div>
-              </div>
+              </Link>
             </div>
           ))}
         </div>
