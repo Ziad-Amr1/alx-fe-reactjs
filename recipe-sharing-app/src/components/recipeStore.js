@@ -1,3 +1,4 @@
+// src/store/recipeStore.js
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -85,6 +86,9 @@ const useRecipeStore = create(
       favorites: [],
       userPreferences: [],
       
+      // Recommendations state
+      recommendations: [],
+      
       // Search and filter states
       searchTerm: '',
       selectedCategory: 'all',
@@ -135,6 +139,32 @@ const useRecipeStore = create(
         }
       }),
       
+      // Recommendations action
+      generateRecommendations: () => set((state) => {
+        if (!state.currentUser) {
+          return { recommendations: [] };
+        }
+        
+        // Mock implementation based on favorites
+        const recommended = state.recipes.filter(recipe =>
+          state.favorites.includes(recipe.id) && Math.random() > 0.5
+        );
+        
+        // If no recommendations from favorites, use preferences
+        if (recommended.length === 0 && state.userPreferences.length > 0) {
+          return {
+            recommendations: state.recipes
+              .filter(recipe => 
+                recipe.tags.some(tag => state.userPreferences.includes(tag)) ||
+                state.userPreferences.includes(recipe.category)
+              )
+              .slice(0, 3)
+          };
+        }
+        
+        return { recommendations: recommended };
+      }),
+      
       // Search and filter actions
       setSearchTerm: (term) => set({ searchTerm: term }),
       setCategory: (category) => set({ selectedCategory: category }),
@@ -174,47 +204,6 @@ const useRecipeStore = create(
       get favoriteRecipes() {
         const { recipes, favorites } = get();
         return recipes.filter(recipe => favorites.includes(recipe.id));
-      },
-      
-      // Get recommended recipes
-      get recommendedRecipes() {
-        const { recipes, userPreferences, favorites } = get();
-        
-        if (userPreferences.length === 0) {
-          // If no preferences, return popular recipes (not in favorites)
-          return recipes
-            .filter(recipe => !favorites.includes(recipe.id))
-            .sort(() => Math.random() - 0.5)
-            .slice(0, 3);
-        }
-        
-        // Score recipes based on user preferences
-        const scoredRecipes = recipes
-          .filter(recipe => !favorites.includes(recipe.id)) // Exclude favorites
-          .map(recipe => {
-            let score = 0;
-            
-            // Score based on tags matching preferences
-            recipe.tags.forEach(tag => {
-              if (userPreferences.includes(tag)) {
-                score += 2;
-              }
-            });
-            
-            // Score based on category (if it matches any preference)
-            if (userPreferences.includes(recipe.category)) {
-              score += 1;
-            }
-            
-            // Add some randomness
-            score += Math.random() * 0.5;
-            
-            return { ...recipe, score };
-          })
-          .filter(recipe => recipe.score > 0) // Only recipes with some match
-          .sort((a, b) => b.score - a.score); // Sort by score
-        
-        return scoredRecipes.slice(0, 3); // Return top 3
       },
       
       // Get unique categories for filter options
