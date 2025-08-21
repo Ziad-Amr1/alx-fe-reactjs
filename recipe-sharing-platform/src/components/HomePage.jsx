@@ -1,4 +1,5 @@
 // src/components/HomePage.jsx
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import recipeData from '../data.json'; // Import the mock data
 
@@ -30,9 +31,9 @@ const HomePage = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">{recipe.title}</h2>
               <p className="text-gray-600">{recipe.summary}</p>
               {/* Link to Detail Page (We'll add this in Task 2) */}
-              <a href={`/recipe/${recipe.id}`} className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+              <Link to={`/recipe/${recipe.id}`} className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
                 View Recipe
-              </a>
+              </Link>
             </div>
           </div>
         ))}
