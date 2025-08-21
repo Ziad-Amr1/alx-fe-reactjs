@@ -1,52 +1,21 @@
-// src/services/githubService.js
-import axios from 'axios';
+import axios from 'axios'
 
-const BASE_URL = 'https://api.github.com';
+const GITHUB_API_URL = 'https://api.github.com'
 
-// Fetch basic user data
-export const fetchUserData = async (username) => {
+export const fetchUserData = async (searchParams) => {
+  const { username, location, minRepos } = searchParams
+  let query = ''
+
+  if (username) query += `user:${username}`
+  if (location) query += ` location:${location}`
+  if (minRepos) query += ` repos:>${minRepos}`
+
   try {
-    const response = await axios.get(`${BASE_URL}/users/${username}`);
-    return response.data;
+    const response = await axios.get(
+      `${GITHUB_API_URL}/search/users?q=${query}&per_page=10`
+    )
+    return response.data
   } catch (error) {
-    if (error.response && error.response.status === 404) {
-      throw new Error('User not found');
-    }
-    throw new Error('An error occurred while fetching user data');
+    throw new Error('Failed to fetch users from GitHub API')
   }
-};
-
-// Advanced search for multiple users
-export const searchUsers = async (query, options = {}) => {
-  try {
-    const { page = 1, per_page = 10, sort, order } = options;
-    let q = query;
-    
-    if (options.location) q += `+location:${options.location}`;
-    if (options.repos) q += `+repos:>=${options.repos}`;
-    if (options.followers) q += `+followers:>=${options.followers}`;
-    
-    const params = {
-      q,
-      page,
-      per_page,
-      sort,
-      order
-    };
-    
-    const response = await axios.get(`${BASE_URL}/search/users`, { params });
-    return response.data;
-  } catch (error) {
-    throw new Error('An error occurred while searching users');
-  }
-};
-
-// Fetch detailed user data
-export const fetchUserDetails = async (username) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/users/${username}`);
-    return response.data;
-  } catch (error) {
-    throw new Error('An error occurred while fetching user details');
-  }
-};
+}
