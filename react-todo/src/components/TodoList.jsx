@@ -36,23 +36,29 @@ const TodoList = () => {
         {todos.map(todo => (
           <li 
             key={todo.id} 
-            className={`flex justify-between items-center p-3 mb-2 rounded ${todo.completed ? 'bg-green-100' : 'bg-white'} border`}
+            className={`flex justify-between items-center p-3 mb-2 rounded ${
+              todo.completed ? 'bg-green-100 line-through' : 'bg-white'
+            } border`}
           >
             <span 
               onClick={() => toggleTodo(todo.id)}
-              className={`cursor-pointer ${todo.completed ? 'line-through text-gray-500' : ''}`}
+              className="cursor-pointer flex-grow"
             >
               {todo.text}
             </span>
             <button 
               onClick={() => deleteTodo(todo.id)}
-              className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"
+              className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600 ml-2"
             >
               Delete
             </button>
           </li>
         ))}
       </ul>
+      
+      {todos.length === 0 && (
+        <p className="text-gray-500 text-center mt-4">No todos yet. Add one above!</p>
+      )}
     </div>
   );
 };
