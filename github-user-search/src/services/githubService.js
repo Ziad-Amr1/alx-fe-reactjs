@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// const GITHUB_API_URL = 'https://api.github.com'
-const GITHUB_API_URL = "https://api.github.com/search/users?q"
+const GITHUB_API_URL = 'https://api.github.com'
+// const GITHUB_API_URL = "https://api.github.com/search/users?q"
 
 // دالة للبحث المتقدم عن المستخدمين
 export const searchUsers = async (searchParams) => {
