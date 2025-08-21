@@ -12,6 +12,8 @@ const queryClient = new QueryClient({
   },
 });
 
+// PostsComponent
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
