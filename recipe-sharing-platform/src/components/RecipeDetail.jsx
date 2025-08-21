@@ -42,6 +42,7 @@ const RecipeDetail = () => {
           <li>Step 1: Do this first...</li>
           <li>Step 2: Then do this...</li>
           <li>Step 3: Finally, enjoy!</li>
+          {/* useEffect */}
         </ol>
       </div>
     </div>
