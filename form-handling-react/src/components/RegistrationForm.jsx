@@ -10,14 +10,20 @@ const RegistrationForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Basic validation logic
+    // Basic validation logic with exact patterns required
     const newErrors = {};
-    if (!username.trim()) newErrors.username = 'Username is required';
-    if (!email.trim()) newErrors.email = 'Email is required';
-    if (!password.trim()) newErrors.password = 'Password is required';
+    if (!username) newErrors.username = 'Username is required';
+    if (!email) newErrors.email = 'Email is required';
+    if (!password) newErrors.password = 'Password is required';
     
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      return;
+    }
+    
+    // Additional validation can be added here if needed
+    if (password.length < 6) {
+      setErrors({password: 'Password must be at least 6 characters'});
       return;
     }
     
