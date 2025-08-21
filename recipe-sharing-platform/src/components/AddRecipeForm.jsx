@@ -6,23 +6,32 @@ const AddRecipeForm = ({ onAddRecipe }) => {
   const [image, setImage] = useState('');
   const [summary, setSummary] = useState('');
   const [ingredients, setIngredients] = useState('');
-  const [steps, setSteps] = useState(''); // Added steps state
+  const [steps, setSteps] = useState('');
 
   // State for validation errors
   const [errors, setErrors] = useState({});
+
+  // Validation function (explicitly named to meet requirement)
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!title.trim()) newErrors.title = 'Title is required.';
+    if (!summary.trim()) newErrors.summary = 'Summary is required.';
+    if (!steps.trim()) newErrors.steps = 'Preparation steps are required.';
+    if (!ingredients.trim()) newErrors.ingredients = 'At least one ingredient is required.';
+    
+    return newErrors;
+  };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent page refresh
 
-    // Simple validation
-    const newErrors = {};
-    if (!title) newErrors.title = 'Title is required.';
-    if (!summary) newErrors.summary = 'Summary is required.';
-    if (!steps) newErrors.steps = 'Preparation steps are required.'; // Added validation for steps
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    // Validate form using our validation function
+    const formErrors = validateForm();
+    
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
       return; // Stop submission if there are errors
     }
 
@@ -36,7 +45,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
       image: image || 'https://via.placeholder.com/150',
       summary,
       ingredients: ingredients.split(',').map(item => item.trim()),
-      steps: steps.split('\n').filter(step => step.trim() !== ''), // Added steps processing
+      steps: steps.split('\n').filter(step => step.trim() !== ''),
     };
 
     // Call the function passed from the parent (HomePage) to add the new recipe
@@ -47,7 +56,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
     setImage('');
     setSummary('');
     setIngredients('');
-    setSteps(''); // Reset steps field
+    setSteps('');
   };
 
   return (
@@ -103,9 +112,10 @@ const AddRecipeForm = ({ onAddRecipe }) => {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             placeholder="Flour, Sugar, Eggs..."
           ></textarea>
+          {errors.ingredients && <p className="mt-1 text-sm text-red-600">{errors.ingredients}</p>}
         </div>
 
-        {/* Steps Textarea - ADDED THIS FIELD */}
+        {/* Steps Textarea */}
         <div>
           <label htmlFor="steps" className="block text-sm font-medium text-gray-700">Preparation Steps (one per line)</label>
           <textarea
