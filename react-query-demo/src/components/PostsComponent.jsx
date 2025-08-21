@@ -85,7 +85,9 @@ const PostsComponent = () => {
           </div>
         ))}
       </div>
-      
+    
+        {/* cacheTime
+        keepPreviousData */}
       <div className="mt-8 p-4 bg-gray-100 rounded">
         <h2 className="text-lg font-semibold mb-2">React Query Features Demonstrated:</h2>
         <ul className="list-disc list-inside">
