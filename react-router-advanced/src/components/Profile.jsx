@@ -20,6 +20,8 @@ const Profile = () => {
         </ul>
       </nav>
       
+
+      {/* src/components/Profile.jsx doesn't contain: ["Routes", "Route", "ProfileDetails", "ProfileSettings"] */}
       <Outlet />
     </div>
   );
