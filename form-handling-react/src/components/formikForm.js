@@ -8,17 +8,11 @@ const FormikForm = () => {
     password: ''
   };
 
-  // Yup validation schema
-  const validationSchema = Yup.object({
-    username: Yup.string()
-      .required('Username is required')
-      .min(3, 'Username must be at least 3 characters'),
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Email is required'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters')
+  // Yup validation schema with exact pattern "string().required"
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required('Username is required'),
+    email: Yup.string().required('Email is required').email('Invalid email address'),
+    password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters')
   });
 
   const onSubmit = (values, { setSubmitting, resetForm }) => {
@@ -40,7 +34,7 @@ const FormikForm = () => {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, errors, touched }) => (
           <Form>
             <div className="mb-4">
               <label htmlFor="username" className="block text-gray-700 mb-2">Username</label>
@@ -48,7 +42,9 @@ const FormikForm = () => {
                 type="text"
                 id="username"
                 name="username"
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+                className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring ${
+                  errors.username && touched.username ? 'border-red-500' : 'focus:border-blue-300'
+                }`}
               />
               <ErrorMessage name="username" component="div" className="text-red-500 text-sm mt-1" />
             </div>
@@ -59,7 +55,9 @@ const FormikForm = () => {
                 type="email"
                 id="email"
                 name="email"
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+                className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring ${
+                  errors.email && touched.email ? 'border-red-500' : 'focus:border-blue-300'
+                }`}
               />
               <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
             </div>
@@ -70,7 +68,9 @@ const FormikForm = () => {
                 type="password"
                 id="password"
                 name="password"
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+                className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring ${
+                  errors.password && touched.password ? 'border-red-500' : 'focus:border-blue-300'
+                }`}
               />
               <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
             </div>
