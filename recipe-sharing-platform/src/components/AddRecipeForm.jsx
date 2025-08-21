@@ -1,4 +1,3 @@
-// src/components/AddRecipeForm.jsx
 import { useState } from 'react';
 
 const AddRecipeForm = ({ onAddRecipe }) => {
@@ -7,7 +6,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
   const [image, setImage] = useState('');
   const [summary, setSummary] = useState('');
   const [ingredients, setIngredients] = useState('');
-  const [instructions, setInstructions] = useState('');
+  const [steps, setSteps] = useState(''); // Added steps state
 
   // State for validation errors
   const [errors, setErrors] = useState({});
@@ -20,7 +19,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
     const newErrors = {};
     if (!title) newErrors.title = 'Title is required.';
     if (!summary) newErrors.summary = 'Summary is required.';
-    // Add more validation as needed...
+    if (!steps) newErrors.steps = 'Preparation steps are required.'; // Added validation for steps
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -32,14 +31,12 @@ const AddRecipeForm = ({ onAddRecipe }) => {
 
     // Create a new recipe object
     const newRecipe = {
-      // A simple way to generate a unique ID (not perfect for production)
       id: Math.floor(Math.random() * 10000),
       title,
-      image: image || 'https://via.placeholder.com/150', // Use a placeholder if no image is provided
+      image: image || 'https://via.placeholder.com/150',
       summary,
-      // Assuming ingredients and instructions are entered as comma-separated and newline-separated
       ingredients: ingredients.split(',').map(item => item.trim()),
-      instructions: instructions.split('\n').filter(step => step.trim() !== ''),
+      steps: steps.split('\n').filter(step => step.trim() !== ''), // Added steps processing
     };
 
     // Call the function passed from the parent (HomePage) to add the new recipe
@@ -50,7 +47,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
     setImage('');
     setSummary('');
     setIngredients('');
-    setInstructions('');
+    setSteps(''); // Reset steps field
   };
 
   return (
@@ -108,18 +105,20 @@ const AddRecipeForm = ({ onAddRecipe }) => {
           ></textarea>
         </div>
 
-        {/* Instructions Textarea */}
+        {/* Steps Textarea - ADDED THIS FIELD */}
         <div>
-          <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">Instructions (step-by-step, on new lines)</label>
+          <label htmlFor="steps" className="block text-sm font-medium text-gray-700">Preparation Steps (one per line)</label>
           <textarea
-            id="instructions"
+            id="steps"
             rows="5"
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
+            value={steps}
+            onChange={(e) => setSteps(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="1. Preheat oven...
-2. Mix ingredients..."
+            placeholder="1. Preheat oven to 350°F...
+2. Mix dry ingredients...
+3. Add wet ingredients..."
           ></textarea>
+          {errors.steps && <p className="mt-1 text-sm text-red-600">{errors.steps}</p>}
         </div>
 
         {/* Submit Button */}
