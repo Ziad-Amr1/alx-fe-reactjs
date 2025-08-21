@@ -8,6 +8,7 @@ const FormikForm = () => {
     password: ''
   };
 
+  // Yup validation schema
   const validationSchema = Yup.object({
     username: Yup.string()
       .required('Username is required')
@@ -26,12 +27,13 @@ const FormikForm = () => {
     setTimeout(() => {
       setSubmitting(false);
       resetForm();
+      alert('Registration successful!');
     }, 1000);
   };
 
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Formik Registration Form</h2>
+      <h2 className="text-2xl font-bold mb-6">Registration Form (Formik)</h2>
       
       <Formik
         initialValues={initialValues}
